@@ -184,6 +184,7 @@ def extract_weather():
         f"weather_{timestamp}.csv"
     )
 
+    # convert data to csv
     df.to_csv(
         output_file,
         index=False

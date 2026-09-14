@@ -1,0 +1,37 @@
+cities_raw.csv
+       │
+       ↓
+pd.read_csv()
+       │
+       ↓
+   كل مدينة
+       │
+       ↓
+latitude + longitude
+       │
+       ↓
+ get_weather()
+       │
+       ↓
+ Open-Meteo API
+       │
+       ↓
+     JSON
+       │
+       ↓
+ weather["daily"]
+       │
+       ↓
+   كل 7 أيام
+       │
+       ↓
+   all_weather
+       │
+       ↓
+pd.DataFrame()
+       │
+       ↓
+     CSV
+       │
+       ↓
+data/bronze/weather/
