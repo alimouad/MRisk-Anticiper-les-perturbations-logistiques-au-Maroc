@@ -1,0 +1,11 @@
+cities
+  ↓
+"فين؟"
+
+weather_forecasts
+  ↓
+"شنو هو الطقس؟"
+
+weather_risks
+  ↓
+"شنو هو مستوى الخطر؟"
