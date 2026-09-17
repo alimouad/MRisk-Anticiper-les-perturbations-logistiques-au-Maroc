@@ -9,9 +9,7 @@ venv/
 .pytest_cache/
 
 logs/*
-data/bronze/*
-data/silver/*
-data/gold/*
+
 
 !.gitkeep
 

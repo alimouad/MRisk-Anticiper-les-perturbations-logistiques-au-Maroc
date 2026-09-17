@@ -49,5 +49,37 @@ services:
     depends_on:
       - postgres
 
+
+  airflow-db:
+    image: postgres:16
+    container_name: meteo-airflow-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${AIRFLOW_DB_NAME}
+      POSTGRES_USER: ${AIRFLOW_DB_USER}
+      POSTGRES_PASSWORD: ${AIRFLOW_DB_PASSWORD}
+    volumes:
+      - airflow_db_data:/var/lib/postgresql/data
+
+  airflow:
+    image: apache/airflow:3.0.6
+    container_name: meteo-airflow
+    restart: unless-stopped
+    depends_on:
+      - airflow-db
+    environment:
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-db:5432/airflow
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./extraction:/opt/airflow/extraction
+      - ./transformation:/opt/airflow/transformation
+      - ./load:/opt/airflow/load
+      - ./data:/opt/airflow/data
+    ports:
+      - "8080:8080"
+    command: standalone
+
 volumes:
   postgres_data:
+  airflow_db_data:  

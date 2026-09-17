@@ -1,21 +1,20 @@
+
 import pandas as pd
 from pathlib import Path
 
 
-INPUT_FILE = Path(
-    "data/silver/weather_joined.csv"
-)
-
-OUTPUT_DIR = Path(
-    "data/gold"
-)
+INPUT_FILE = Path("data/silver/weather_joined.csv")
+OUTPUT_DIR = Path("data/gold")
 
 
 def create_features():
 
     print("Starting Feature Engineering...")
 
+    # ==========================================
     # Read Silver data
+    # ==========================================
+
     df = pd.read_csv(INPUT_FILE)
 
     print(f"Input rows: {len(df)}")
@@ -56,10 +55,10 @@ def create_features():
     )
 
     # ==========================================
-    # 3. Rain Category
+    # 3. Precipitation Category
     # ==========================================
 
-    def rain_category(rain):
+    def precipitation_category(rain):
 
         if rain == 0:
             return "None"
@@ -76,9 +75,9 @@ def create_features():
         else:
             return "Very High"
 
-    df["rain_category"] = (
+    df["precipitation_category"] = (
         df["precipitation"]
-        .apply(rain_category)
+        .apply(precipitation_category)
     )
 
     # ==========================================
@@ -141,7 +140,7 @@ def create_features():
             "wind_gusts",
             "weather_code",
             "temperature_category",
-            "rain_category",
+            "precipitation_category",
             "wind_category",
             "forecast_day",
             "month",
@@ -168,9 +167,7 @@ def create_features():
     )
 
     print("Feature Engineering completed!")
-
     print(f"Output rows: {len(df)}")
-
     print(f"Saved to: {output_file}")
 
     return df
@@ -178,3 +175,4 @@ def create_features():
 
 if __name__ == "__main__":
     create_features()
+

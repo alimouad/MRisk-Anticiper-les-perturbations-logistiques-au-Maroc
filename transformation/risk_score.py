@@ -1,14 +1,10 @@
+
 import pandas as pd
 from pathlib import Path
 
 
-INPUT_FILE = Path(
-    "data/gold/weather_features.csv"
-)
-
-OUTPUT_FILE = Path(
-    "data/gold/weather_risk.csv"
-)
+INPUT_FILE = Path("data/gold/weather_features.csv")
+OUTPUT_FILE = Path("data/gold/weather_risk.csv")
 
 
 # ==========================================
@@ -61,8 +57,12 @@ def calculate_wind_risk(wind):
 
 def calculate_temperature_risk(temp):
 
+    # Cold temperature
+    if temp < 18:
+        return 30
+
     # Normal temperature
-    if 18 <= temp <= 30:
+    elif temp <= 30:
         return 0
 
     # High temperature
@@ -77,13 +77,9 @@ def calculate_temperature_risk(temp):
     elif temp <= 45:
         return 80
 
-    # Very extreme
-    elif temp > 45:
+    # Very extreme temperature
+    else:
         return 100
-
-    # Cold temperature
-    elif temp < 18:
-        return 30
 
 
 # ==========================================
@@ -135,6 +131,7 @@ def create_risk_score():
 
     print("Starting Risk Score calculation...")
 
+    # Read Gold Features
     df = pd.read_csv(
         INPUT_FILE,
         keep_default_na=False
@@ -196,10 +193,19 @@ def create_risk_score():
     # Save Gold
     # --------------------------------------
 
+    OUTPUT_FILE.parent.mkdir(
+        parents=True,
+        exist_ok=True
+    )
+
     df.to_csv(
         OUTPUT_FILE,
         index=False
     )
+
+    # --------------------------------------
+    # Results
+    # --------------------------------------
 
     print()
     print("================================")
@@ -221,5 +227,4 @@ def create_risk_score():
 
 
 if __name__ == "__main__":
-
     create_risk_score()

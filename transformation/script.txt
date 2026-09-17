@@ -1,0 +1,64 @@
+1. cleaning.py 🧹
+
+كيقوم بـ:
+
+يحيد duplicates
+يحيد spaces من أسماء المدن
+يحول الأرقام لـ numeric
+يحول التاريخ لـ date
+يحيد البيانات الناقصة أو غير الصحيحة
+يتحقق من coordinates ديال المدن
+يخرج:
+cities_clean.csv
+weather_clean.csv
+2. validation.py ✅
+
+كيقوم بـ Data Quality Checks:
+
+واش كاينين NULL / missing values
+واش كاينين duplicates
+واش precipitation صحيحة
+واش wind speed صحيحة
+واش probability بين 0 و100
+واش coordinates صحيحة
+
+يعني كيقول لينا: واش الـ data اللي نظفناها موثوقة؟
+
+3. join_data.py 🔗
+
+كيجمع:
+
+Cities + Weather
+
+باستعمال city_name.
+
+مثلاً:
+
+Casablanca
+   +
+Weather Casablanca
+   ↓
+Casablanca + coordinates + temperature + rain + wind...
+
+وكيخرج:
+
+weather_joined.csv
+
+
+الخلاصة
+
+BRONZE
+  ↓
+cleaning.py
+  ↓
+Clean Data
+  ↓
+validation.py
+  ↓
+Quality Check
+  ↓
+join_data.py
+  ↓
+Cities + Weather
+  ↓
+SILVER

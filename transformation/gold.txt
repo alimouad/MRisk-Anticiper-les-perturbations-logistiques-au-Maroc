@@ -1,0 +1,61 @@
+                    BRONZE
+                      │
+              Raw Open-Meteo
+                      ↓
+                    SILVER
+                      │
+          Cleaning + Validation
+                      ↓
+               JOINED DATA
+                      │
+                      ↓
+             FEATURE ENGINEERING
+                      │
+        ┌─────────────┼─────────────┐
+        ↓             ↓             ↓
+   Temperature      Rain          Wind
+    Category       Category      Category
+        │             │             │
+        └─────────────┼─────────────┘
+                      ↓
+                Date Features
+                      ↓
+                 GOLD FEATURES
+                      │
+                      ↓
+                RISK SCORING
+                      │
+                      ↓
+                RISK SCORE 0-100
+                      ↓
+                RISK LEVEL
+                      ↓
+                 PostgreSQL
+
+الخلاصة: Feature Engineering عندك دابا كتدير 3 أنواع رئيسية:
+
+🌡️ Weather categorization → Temperature / Rain / Wind
+📅 Date features → Day / Month / Day of Week
+🧱 Preparation for Risk Scoring → كتوجد البيانات باش risk_score.py يحسب مستوى الخطر.
+
+Preparation for Risk Scoring معناها:
+
+فـFeature Engineering كنوجد البيانات ونضيف features مفيدة، ونخلي القيم الرقمية الأصلية اللي غادي يحتاجها risk_score.py، باش المرحلة الموالية تقدر تحول كل مؤشر إلى Risk وتجمعهم فـScore واحد.
+
+يعني:
+
+Feature Engineering
+       ↓
+"شنو كاين فالطقس؟"
+       ↓
+Categories + Date Features
+       ↓
+Risk Scoring
+       ↓
+"شحال مستوى الخطر؟"
+       ↓
+Risk Score + Risk Level
+
+Feature Engineering = وصف وتنظيم البيانات
+
+Risk Scoring = تحويل البيانات إلى مستوى خطر.
