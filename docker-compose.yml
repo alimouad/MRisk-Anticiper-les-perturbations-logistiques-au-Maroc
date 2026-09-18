@@ -1,4 +1,7 @@
+
 services:
+
+
   postgres:
     image: postgres:16
     container_name: meteo-postgres
@@ -15,6 +18,8 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+
+
   pgadmin:
     image: dpage/pgadmin4:latest
     container_name: meteo-pgadmin
@@ -30,6 +35,7 @@ services:
     depends_on:
       - postgres
 
+
   streamlit:
     build:
       context: .
@@ -38,48 +44,85 @@ services:
     container_name: meteo-streamlit
     restart: unless-stopped
 
-    command: streamlit run dashboard/app.py --server.address=0.0.0.0 --server.port=8501
+    command: >
+      streamlit run dashboard/app.py
+      --server.address=0.0.0.0
+      --server.port=8501
 
     ports:
       - "8501:8501"
 
-    env_file:
-      - .env
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
     depends_on:
       - postgres
+
 
 
   airflow-db:
     image: postgres:16
     container_name: meteo-airflow-db
     restart: unless-stopped
+
     environment:
       POSTGRES_DB: ${AIRFLOW_DB_NAME}
       POSTGRES_USER: ${AIRFLOW_DB_USER}
       POSTGRES_PASSWORD: ${AIRFLOW_DB_PASSWORD}
+
     volumes:
       - airflow_db_data:/var/lib/postgresql/data
 
+
   airflow:
-    image: apache/airflow:3.0.6
+    build:
+      context: .
+      dockerfile: Dockerfile.airflow
+
     container_name: meteo-airflow
     restart: unless-stopped
+
     depends_on:
       - airflow-db
+      - postgres
+
     environment:
-      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-db:5432/airflow
+
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: >-
+        postgresql+psycopg2://airflow:airflow@airflow-db:5432/airflow
+
       AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+
+      PYTHONPATH: /opt/airflow
+
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+
+
     volumes:
       - ./dags:/opt/airflow/dags
       - ./extraction:/opt/airflow/extraction
       - ./transformation:/opt/airflow/transformation
       - ./load:/opt/airflow/load
       - ./data:/opt/airflow/data
+
     ports:
       - "8080:8080"
+
     command: standalone
 
+
 volumes:
+
   postgres_data:
-  airflow_db_data:  
+
+  airflow_db_data:
+

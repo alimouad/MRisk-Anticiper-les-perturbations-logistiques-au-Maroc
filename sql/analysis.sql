@@ -179,4 +179,4 @@ JOIN weather_risks wr
     ON wr.weather_id = wf.id
 WHERE wr.risk_score >= 50
 ORDER BY wr.risk_score DESC;
-```
+
