@@ -1,0 +1,120 @@
+@startuml
+
+title Class Diagram - MRisk Weather Risk Pipeline
+
+skinparam classAttributeIconSize 0
+
+class City {
+    - id: int
+    - name: String
+    - latitude: Decimal
+    - longitude: Decimal
+}
+
+class WeatherForecast {
+    - id: int
+    - cityId: int
+    - forecastDate: Date
+    - temperatureMax: Decimal
+    - temperatureMin: Decimal
+    - precipitationSum: Decimal
+    - precipitationProbability: int
+    - windSpeedMax: Decimal
+    - windGustsMax: Decimal
+    - weatherCode: int
+}
+
+class WeatherRisk {
+    - id: int
+    - weatherId: int
+    - temperatureCategory: String
+    - precipitationCategory: String
+    - windCategory: String
+    - riskScore: Decimal
+    - riskLevel: String
+}
+
+class DataExtraction {
+    + extractCities()
+    + extractWeather()
+    + getWeather()
+}
+
+class DataCleaning {
+    + cleanCities()
+    + cleanWeather()
+    + removeDuplicates()
+    + convertTypes()
+}
+
+class DataValidation {
+    + validateCities()
+    + validateWeather()
+    + checkMissingValues()
+    + checkInvalidValues()
+}
+
+class DataJoin {
+    + joinCitiesWeather()
+}
+
+class FeatureEngineering {
+    + createTemperatureCategory()
+    + createPrecipitationCategory()
+    + createWindCategory()
+    + createDateFeatures()
+}
+
+class RiskCalculator {
+    + calculateRainRisk()
+    + calculateWindRisk()
+    + calculateTemperatureRisk()
+    + calculateProbabilityRisk()
+    + calculateRiskScore()
+    + determineRiskLevel()
+}
+
+class DataLoader {
+    + loadCities()
+    + loadWeatherForecasts()
+    + loadWeatherRisks()
+    + updateExistingData()
+}
+
+class Dashboard {
+    + filterByCity()
+    + filterByDate()
+    + filterByRiskLevel()
+    + displayRisk()
+    + displayCharts()
+}
+
+City "1" --> "0..*" WeatherForecast : possède
+WeatherForecast "1" --> "1" WeatherRisk : génère
+
+DataExtraction --> City : extrait
+DataExtraction --> WeatherForecast : récupère
+
+DataCleaning --> City : nettoie
+DataCleaning --> WeatherForecast : nettoie
+
+DataValidation --> City : valide
+DataValidation --> WeatherForecast : valide
+
+DataJoin --> City : joint
+DataJoin --> WeatherForecast : joint
+
+FeatureEngineering --> WeatherForecast : transforme
+FeatureEngineering --> WeatherRisk : crée features
+
+RiskCalculator --> WeatherForecast : analyse
+RiskCalculator --> WeatherRisk : calcule
+
+DataLoader --> City : charge
+DataLoader --> WeatherForecast : charge
+DataLoader --> WeatherRisk : charge
+
+Dashboard --> WeatherForecast : consulte
+Dashboard --> WeatherRisk : affiche
+
+@enduml
